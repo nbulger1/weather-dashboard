@@ -1,0 +1,121 @@
+.container {
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 0.2fr 1.5fr 0.1fr 0.8fr 0.2fr;
+    grid-template-areas: 
+    "header header header header header header"
+    "sidebar main main main main main"
+    "sidebar fiveday fiveday fiveday fiveday fiveday"
+    "sidebar day-1 day-2 day-3 day-4 day-5"
+    "footer footer footer footer footer footer";
+    grid-gap: 0.2rem;
+}
+
+.header {
+    background-color: darkblue;
+    color: white;
+    text-align: center;
+    grid-area: header;
+}
+
+.sidebar {
+    grid-area: sidebar;
+}
+
+.today-card-container {
+    grid-area: main;
+    border: black solid 1px;
+    margin: 5px;
+}
+
+#five-day-header {
+    grid-area: fiveday;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    background-color: lightgrey;
+}
+
+#day-1 {
+    grid-area: day-1;
+}
+
+#day-2 {
+    grid-area: day-2;
+}
+
+#day-3 {
+    grid-area: day-3;
+}
+
+#day-4 {
+    grid-area: day-4;
+}
+
+#day-5 {
+    grid-area: day-5;
+}
+
+#footer {
+    grid-area: footer;
+    background-color: lightyellow;
+}
+
+.search-card{
+    width: 95%;
+}
+
+.form-label {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.city-entry {
+    width: 95%;
+}
+
+.submit {
+    margin-top: 5px;
+    width: 95%;
+}
+
+.submit-line-placeholder {
+    padding: 7px;
+    border-bottom: black 2px solid;
+    width: 95%;
+}
+
+.popular-city {
+    display: block;
+    background-color: rgb(175, 172, 172);
+    color: black;
+    border: none;
+    margin-top: 20px;
+    width: 95%;
+}
+
+.fiveday-card {
+    background-color: rgb(66, 66, 85);
+    color: white;
+    margin: 5px;
+}
+
+@media only screen and (max-width: 550px){
+    .container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 0.4fr 0.4fr 2.2fr 1.2fr 1.2fr 1.2fr 1.2fr 1.2fr 1fr;
+        grid-template-areas: 
+        "header"
+        "sidebar"
+        "main"
+        "fiveday"
+        "day-1"
+        "day-2"
+        "day-3"
+        "day-4"
+        "day-5"
+        "footer";
+    }
+}
