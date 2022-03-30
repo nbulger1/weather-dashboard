@@ -30,7 +30,7 @@
     margin: 5px;
 }
 
-#five-day-header {
+.five-day-header {
     grid-area: fiveday;
     font-size: 24px;
     font-weight: bold;
@@ -92,8 +92,12 @@
     background-color: rgb(175, 172, 172);
     color: black;
     border: none;
-    margin-top: 20px;
+    margin-top: 10px;
     width: 95%;
+}
+
+#clear-history {
+    margin-top: 7px;
 }
 
 .fiveday-card {
