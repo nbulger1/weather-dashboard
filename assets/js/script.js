@@ -14,7 +14,7 @@ var submitEl = document.querySelector(".submit");
 var searchHistoryContainerEl = document.querySelector(".search-history-container");
 var cityEntryEl = document.querySelector(".city-entry");
 var todayCardContainerEl = document.querySelector(".today-card-container");
-var fivedayContainerEl = document.querySelectorAll(".five-day-container");
+var fivedayCardEl = document.querySelectorAll(".fiveday-card");
 
 function submitButtonHandler() {
     var citySubmit = JSON.parse(localStorage.getItem("cities")) || [];
@@ -34,49 +34,40 @@ function submitButtonHandler() {
 
     localStorage.setItem("cities", JSON.stringify(citySubmit));
 
-    var city = cityEntryEl.value.trim();
+    //clear out the main text content
 
-    if(city){
-        getCurrentWeather(city);
-        todayCardContainerEl.textContent = "";
-        fivedayContainerEl.textContent = "";
-    };
+    console.log(cityEntryValueEl);
+    var post;
+    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + cityEntryValueEl + "&limit=5&appid=27d064bc9585ece2266de44bda36203b").then(function (response) {
+        if(response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(response);
+        }
+    }).then(function(data) {
+        post = data;
+        console.log(post);
+        var lat = post[0].lat;
+        var long = post[0].lon;
+        return fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + long + "&appid=27d064bc9585ece2266de44bda36203b");
+    }).then(function (response) {
+        if(response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(response);
+        }
+    }).then(function (userData) {
+        console.log(post, userData);
+        displayCurrentWeather(userData);
+        displayFiveDayForecast(userData);
+    }).catch(function(error) {
+        console.warn(error);
+    })
 
 };
 
 submitEl.addEventListener('click', submitButtonHandler);
 
-//One function for getting the lat long of the city entered
-var getCurrentWeather = function(city){
-    var cityApiUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + '&limit=5&appid=27d064bc9585ece2266de44bda36203b';
-    // var latLongApiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=27d064bc9585ece2266de44bda36203b";
-
-    fetch(cityApiUrl)
-    .then(function (response) {
-        if (response.ok) {
-          console.log(response);
-          response.json().then(function (data) {
-            var lat = data.lat;
-            var long = data.long;
-        //   });
-        // } else {
-        //   //404 or 500 error will display in alert box
-        //   alert('Error: ' + response.statusText);
-        // }
-        return fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=27d064bc9585ece2266de44bda36203b");
-        }).then(function (response) {
-            if (response.ok) {
-                console.log(response);
-                response.json().then(function (data) {
-                console.log(data);
-                displayCurrentWeather(data);
-              });
-            } else {
-              alert('Error: ' + response.statusText);
-            }
-        });
-    };
-});
 
 function displayCurrentWeather(repos) {
 
@@ -85,65 +76,77 @@ function displayCurrentWeather(repos) {
         return;
     };
 
-    for(var i=0; i<repos.length; i++){
-        var date = repos[i].dt;
-        var icon = repos[i].weather.icon;
-        var temperature = "Temp: " + repos[i].main.temp;
-        var wind = "Wind: " + repos[i].wind.speed + "MPH";
-        var humidity = "Humidity: " + repos[i].main.humidity + "%";
-        var uvIndex = "UV Index: " + repos[i];
+    // var date = repos.dt;
+    var date = moment().format("MM/DD/YYYY");
 
-        var dateEl = document.createElement('p')
+    var icon = repos.current.weather[0].icon;
+    console.log(icon)
+    //convert temperature from Kelvin to Farenheit
+    var temperature = "Temp: " + (((repos.current.temp-273.15)*1.8)+32).toFixed(1) + " \xB0F";
+    var wind = "Wind: " + repos.current.wind_speed + " MPH";
+    var humidity = "Humidity: " + repos.current.humidity + "%";
+    var uvIndex = "UV Index: " + repos.current.uvi;
+
+    var dateEl = document.createElement('p');
+    var iconEl = document.createElement('img');
+    var temperatureEl = document.createElement('p');
+    var windEl = document.createElement('p');
+    var humidityEl = document.createElement('p');
+    var uvIndexEl = document.createElement('p');
+
+    dateEl.textContent = date;
+    iconEl.setAttribute("src", "http://openweathermap.org/img/w/" + icon + ".png");
+    temperatureEl.textContent = temperature;
+    windEl.textContent = wind;
+    humidityEl.textContent = humidity;
+    uvIndexEl.textContent = uvIndex;
+
+    todayCardContainerEl.appendChild(dateEl);
+    todayCardContainerEl.appendChild(iconEl);
+    todayCardContainerEl.appendChild(temperatureEl);
+    todayCardContainerEl.appendChild(windEl);
+    todayCardContainerEl.appendChild(humidityEl);
+    todayCardContainerEl.appendChild(uvIndexEl);
+};
+
+function displayFiveDayForecast(repos){
+
+    if(repos.length === 0){
+        fivedayContainerEl.textContent = "No repositories found";
+        return;
+    };
+
+    for(var i=1; i<6; i++){
+        var date = moment().add(i, "d").format("MM/DD/YYYY");
+
+        var icon = repos.daily[i].weather[0].icon;
+        //convert temperature from Kelvin to Farenheit
+        var temperature = "Temp: " + (((repos.daily[i].temp.day-273.15)*1.8)+32).toFixed(1) + " \xB0F";
+        var wind = "Wind: " + repos.daily[i].wind_speed + " MPH";
+        var humidity = "Humidity: " + repos.daily[i].humidity + "%";
+
+        console.log("Fiveday:", temperature)
+
+        var dateEl = document.createElement('p');
+        var iconEl = document.createElement('img');
         var temperatureEl = document.createElement('p');
         var windEl = document.createElement('p');
         var humidityEl = document.createElement('p');
-        var uvIndexEl = document.createElement('p');
 
-        todayCardContainerEl.appendChild(dateEl);
-        todayCardContainerEl.appendChild(temperatureEl);
-        todayCardContainerEl.appendChild(windEl);
-        todayCardContainerEl.appendChild(humidityEl);
-        todayCardContainerEl.appendChild(uvIndexEl);
-    };
+        dateEl.textContent = date;
+        iconEl.setAttribute("src", "http://openweathermap.org/img/w/" + icon + ".png");
+        temperatureEl.textContent = temperature;
+        windEl.textContent = wind;
+        humidityEl.textContent = humidity;
+
+        fivedayCardEl[i-1].appendChild(dateEl);
+        fivedayCardEl[i-1].appendChild(iconEl);
+        fivedayCardEl[i-1].appendChild(temperatureEl);
+        fivedayCardEl[i-1].appendChild(windEl);
+        fivedayCardEl[i-1].appendChild(humidityEl);
+    }
 
 };
-
-//Figure this out after current weather
-// var getFiveDayForecast = function(lat, long){
-    
-//     var apiUrl = "api.openweathermap.org/data/2.5/forecast?" + lat + "&lon=" + long + "&appid=27d064bc9585ece2266de44bda36203b";
-// };
-
-//Figure this out after current weather
-// function displayFiveDayForecast(){
-
-//     if(repos.length === 0){
-//         fivedayContainerEl.textContent = "No repositories found";
-//         return;
-//     };
-
-//     for(var i=0; i<repos.length; i++){
-//         var date = repos[i].list.dt_text;
-//         var icon = repos[i].weather.icon;
-//         var temperature = "Temp: " + repos[i].main.temp;
-//         var wind = "Wind: " + repos[i].wind.speed + "MPH";
-//         var humidity = "Humidity: " + repos[i].main.humidity + "%";
-
-//         var dateEl = document.createElement('h2');
-//         var iconEl = document.createElement('p');
-//         var temperatureEl = document.createElement('p');
-//         var windEl = document.createElement('p');
-//         var humidityEl = document.createElement('p');
-//         var uvIndexEl = document.createElement('p');
-
-//         fivedayContainerEl.appendChild(dateEl);
-//         fivedayContainerEl.appendChild(temperatureEl);
-//         fivedayContainerEl.appendChild(windEl);
-//         fivedayContainerEl.appendChild(humidityEl);
-//         fivedayContainerEl.appendChild(uvIndexEl);
-//     };
-
-// };
 
 //Populate the search history city buttons through page reload
 window.addEventListener("load", function(){
@@ -177,4 +180,3 @@ clearHistoryEl.addEventListener("click", function(event){
 //data.lat, data.lon
 
 //my API key: 27d064bc9585ece2266de44bda36203b
-}
