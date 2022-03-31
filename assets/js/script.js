@@ -28,6 +28,7 @@ function submitButtonHandler() {
         var cityHistoryEl = document.createElement("button");
         cityHistoryEl.textContent = cityEntryValueEl;
         cityHistoryEl.classList = "btn btn-primary search-history";
+        cityHistoryEl.setAttribute("data-attribute", cityEntryValueEl);
         searchHistoryContainerEl.appendChild(cityHistoryEl);
     } else {
         alert("That city is already in your recents!");
@@ -36,6 +37,12 @@ function submitButtonHandler() {
     localStorage.setItem("cities", JSON.stringify(citySubmit));
 
     console.log(cityEntryValueEl);
+
+    getWeather(cityEntryValueEl);
+
+};
+
+function getWeather(cityEntryValueEl) {
     var post;
     fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + cityEntryValueEl + "&limit=5&appid=27d064bc9585ece2266de44bda36203b").then(function (response) {
         if(response.ok) {
@@ -62,19 +69,23 @@ function submitButtonHandler() {
     }).catch(function(error) {
         console.warn(error);
     })
-
-};
+}
 
 submitEl.addEventListener('click', submitButtonHandler);
 
 // Make the history buttons display the weather
 //Add a data attribute that is the city that the history button is and get the attribute in place of the input field text to run through the fetch
 
-// var searchHistoryEl = document.querySelectorAll(".search-history");
-// for(i=0; i<searchHistoryEl.length; i++){
-//     searchHistoryEl[i].addEventListener('click', function() {
-//         //Add a data attribute in above function that is the city that the history button is and get the attribute in this function in place of the input field text to run through the fetch
-// })
+var searchHistoryEl = document.querySelectorAll(".search-history");
+console.log("Search History: ", searchHistoryEl)
+
+for(i=0; i<searchHistoryEl.length; i++){
+    searchHistoryEl[i].addEventListener('click', function() {
+        var cityEntryValueEl = searchHistoryEl[i].getAttribute("data-attribute");
+        console.log("History: " , cityEntryValueEl)
+        getWeather(cityEntryValueEl);
+    });
+};
 
 function displayCurrentWeather(repos) {
 
