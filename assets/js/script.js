@@ -16,9 +16,11 @@ var cityEntryEl = document.querySelector(".city-entry");
 var todayCardContainerEl = document.querySelector(".today-card-container");
 var fivedayCardEl = document.querySelectorAll(".fiveday-card");
 
+//maybe pass the city into the submitbuttonhandler from a getWeather(city) function that does the fetch :) ?
 function submitButtonHandler() {
     var citySubmit = JSON.parse(localStorage.getItem("cities")) || [];
     var cityEntryValueEl = document.querySelector(".city-entry").value.trim();
+    //Add data validation here for the city name
 
     //If the current citySubmit array doesn't contain the city entered then push it to the array and add a search history button
     if(!citySubmit.includes(cityEntryValueEl)){
@@ -27,18 +29,11 @@ function submitButtonHandler() {
         cityHistoryEl.textContent = cityEntryValueEl;
         cityHistoryEl.classList = "btn btn-primary search-history";
         searchHistoryContainerEl.appendChild(cityHistoryEl);
-
-        var date = moment().format("MM/DD/YYYY");
-        var cityHeaderEl = document.createElement("h2");
-        cityHeaderEl.textContent = cityEntryValueEl + "-" + date;
-        todayCardContainerEl.appendChild(cityHeaderEl);
     } else {
         alert("That city is already in your recents!");
     };
 
     localStorage.setItem("cities", JSON.stringify(citySubmit));
-
-    //clear out the main text content
 
     console.log(cityEntryValueEl);
     var post;
@@ -68,27 +63,35 @@ function submitButtonHandler() {
         console.warn(error);
     })
 
-    cityEntryEl.value = "";
-
 };
 
 submitEl.addEventListener('click', submitButtonHandler);
 
-//Make the history buttons display the weather
-// var searchHistoryEl = document.querySelectorAll("search-history");
+// Make the history buttons display the weather
+//Add a data attribute that is the city that the history button is and get the attribute in place of the input field text to run through the fetch
+
+// var searchHistoryEl = document.querySelectorAll(".search-history");
 // for(i=0; i<searchHistoryEl.length; i++){
-//     searchHistoryEl[i].addEventListener('click', displayCurrentWeather(userData))
-//     searchHistoryEl[i].addEventListener('click', displayFiveDayForecast(userData))
-// }
+//     searchHistoryEl[i].addEventListener('click', function() {
+//         //Add a data attribute in above function that is the city that the history button is and get the attribute in this function in place of the input field text to run through the fetch
+// })
 
 function displayCurrentWeather(repos) {
+
+    //Clear out current day content
+    todayCardContainerEl.innerHTML = "";
 
     if(repos.length === 0){
         todayCardContainerEl.textContent = "No repositories found";
         return;
     };
     // var date = repos.dt;
-
+    var cityEntryValueEl = document.querySelector(".city-entry").value.trim();
+    var date = moment().format("MM/DD/YYYY");
+    var cityHeaderEl = document.createElement("h2");
+    cityHeaderEl.textContent = cityEntryValueEl + "-" + date;
+    todayCardContainerEl.appendChild(cityHeaderEl);
+    cityEntryEl.value = "";
 
     var icon = repos.current.weather[0].icon;
     //convert temperature from Kelvin to Farenheit
@@ -129,6 +132,11 @@ function displayCurrentWeather(repos) {
 };
 
 function displayFiveDayForecast(repos){
+
+    //Clear out five day forecast
+    for(var i=0; i<fivedayCardEl.length; i++){
+        fivedayCardEl[i].innerHTML = "";
+    };
 
     if(repos.length === 0){
         fivedayContainerEl.textContent = "No repositories found";
@@ -186,14 +194,3 @@ clearHistoryEl.addEventListener("click", function(event){
     window.location.reload();
 });
 
-//API call for current weather (https://openweathermap.org/current)
-//https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
-
-//API call for 5 day forecast (https://openweathermap.org/forecast5)
-//api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
-
-//API call for lat long of city name 
-//http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
-//data.lat, data.lon
-
-//my API key: 27d064bc9585ece2266de44bda36203b
