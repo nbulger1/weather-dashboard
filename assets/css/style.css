@@ -28,6 +28,7 @@
     grid-area: main;
     border: black solid 1px;
     margin: 5px;
+    padding: 5px;
 }
 
 .five-day-header {
@@ -100,10 +101,39 @@
     margin-top: 7px;
 }
 
+.today-card-container-clear {
+    grid-area: main;
+    border: none;
+}
+
+.fiveday-card-clear {
+    background-color: white;
+    color: black;
+    border: none;
+}
+
 .fiveday-card {
     background-color: rgb(66, 66, 85);
     color: white;
     margin: 5px;
+    border: solid rgb(66, 66, 85) 5px;
+}
+
+.uv-good {
+    background-color: green;
+    color: white;
+    padding: 2px;
+}
+
+.uv-okay {
+    background-color: yellow;
+    padding: 2px;
+}
+
+.uv-bad {
+    background-color: red;
+    color: white;
+    padding: 2px;
 }
 
 @media only screen and (max-width: 550px){

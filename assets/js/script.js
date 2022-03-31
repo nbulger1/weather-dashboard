@@ -27,7 +27,11 @@ function submitButtonHandler() {
         cityHistoryEl.textContent = cityEntryValueEl;
         cityHistoryEl.classList = "btn btn-primary search-history";
         searchHistoryContainerEl.appendChild(cityHistoryEl);
-        cityEntryEl.value = "";
+
+        var date = moment().format("MM/DD/YYYY");
+        var cityHeaderEl = document.createElement("h2");
+        cityHeaderEl.textContent = cityEntryValueEl + "-" + date;
+        todayCardContainerEl.appendChild(cityHeaderEl);
     } else {
         alert("That city is already in your recents!");
     };
@@ -64,10 +68,18 @@ function submitButtonHandler() {
         console.warn(error);
     })
 
+    cityEntryEl.value = "";
+
 };
 
 submitEl.addEventListener('click', submitButtonHandler);
 
+//Make the history buttons display the weather
+// var searchHistoryEl = document.querySelectorAll("search-history");
+// for(i=0; i<searchHistoryEl.length; i++){
+//     searchHistoryEl[i].addEventListener('click', displayCurrentWeather(userData))
+//     searchHistoryEl[i].addEventListener('click', displayFiveDayForecast(userData))
+// }
 
 function displayCurrentWeather(repos) {
 
@@ -75,38 +87,45 @@ function displayCurrentWeather(repos) {
         todayCardContainerEl.textContent = "No repositories found";
         return;
     };
-
     // var date = repos.dt;
-    var date = moment().format("MM/DD/YYYY");
+
 
     var icon = repos.current.weather[0].icon;
-    console.log(icon)
     //convert temperature from Kelvin to Farenheit
     var temperature = "Temp: " + (((repos.current.temp-273.15)*1.8)+32).toFixed(1) + " \xB0F";
     var wind = "Wind: " + repos.current.wind_speed + " MPH";
     var humidity = "Humidity: " + repos.current.humidity + "%";
-    var uvIndex = "UV Index: " + repos.current.uvi;
+    var uvIndex = repos.current.uvi;
 
-    var dateEl = document.createElement('p');
     var iconEl = document.createElement('img');
     var temperatureEl = document.createElement('p');
     var windEl = document.createElement('p');
     var humidityEl = document.createElement('p');
-    var uvIndexEl = document.createElement('p');
+    var uvIndexTextEl = document.createElement('p');
+    var uvIndexEl = document.createElement('span');
 
-    dateEl.textContent = date;
+    if(uvIndex <= 2){
+        uvIndexEl.setAttribute("class", "uv-good");
+        uvIndexEl.setAttribute("class", "uv-good");
+    } else if(uvIndex > 2 & uvIndex <=5) {
+        uvIndexEl.setAttribute("class", "uv-okay");
+    } else {
+        uvIndexEl.setAttribute("class", "uv-bad");
+    }
+
     iconEl.setAttribute("src", "http://openweathermap.org/img/w/" + icon + ".png");
     temperatureEl.textContent = temperature;
     windEl.textContent = wind;
     humidityEl.textContent = humidity;
     uvIndexEl.textContent = uvIndex;
+    uvIndexTextEl.textContent = "UV Index: ";
 
-    todayCardContainerEl.appendChild(dateEl);
     todayCardContainerEl.appendChild(iconEl);
     todayCardContainerEl.appendChild(temperatureEl);
     todayCardContainerEl.appendChild(windEl);
     todayCardContainerEl.appendChild(humidityEl);
-    todayCardContainerEl.appendChild(uvIndexEl);
+    uvIndexTextEl.appendChild(uvIndexEl);
+    todayCardContainerEl.appendChild(uvIndexTextEl);
 };
 
 function displayFiveDayForecast(repos){
@@ -124,8 +143,6 @@ function displayFiveDayForecast(repos){
         var temperature = "Temp: " + (((repos.daily[i].temp.day-273.15)*1.8)+32).toFixed(1) + " \xB0F";
         var wind = "Wind: " + repos.daily[i].wind_speed + " MPH";
         var humidity = "Humidity: " + repos.daily[i].humidity + "%";
-
-        console.log("Fiveday:", temperature)
 
         var dateEl = document.createElement('p');
         var iconEl = document.createElement('img');
