@@ -158,6 +158,20 @@ function displayCurrentWeather(repos) {
     uvIndexEl.textContent = uvIndex;
     uvIndexTextEl.textContent = "UV Index: ";
 
+    if(repos.current.weather[0].main == "Clouds"){
+        todayCardContainerEl.style.backgroundImage = "url('./assets/images/clouds.jpg')";
+        todayCardContainerEl.style.color = "black";
+    } else if(repos.current.weather[0].main == "Clear"){
+        todayCardContainerEl.style.backgroundImage = "url('./assets/images/sun.png')";
+        todayCardContainerEl.style.color = "black";
+    } else if(repos.current.weather[0].main == "Snow"){
+        todayCardContainerEl.style.backgroundImage = "url('./assets/images/snow.jpg')";
+        todayCardContainerEl.style.color = "black";
+    } else if(repos.current.weather[0].main == "Rain"){
+        todayCardContainerEl.style.backgroundImage = "url('./assets/images/rain.jpg')";
+        todayCardContainerEl.style.color = "white";
+    }
+
     todayCardContentEl.appendChild(iconEl);
     todayCardContentEl.appendChild(temperatureEl);
     todayCardContentEl.appendChild(windEl);
