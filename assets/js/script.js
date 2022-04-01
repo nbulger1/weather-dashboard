@@ -14,12 +14,26 @@ var submitEl = document.querySelector(".submit");
 var searchHistoryContainerEl = document.querySelector(".search-history-container");
 var cityEntryEl = document.querySelector(".city-entry");
 var todayCardContainerEl = document.querySelector(".today-card-container");
+var todayCardHeaderEl = document.querySelector(".today-card-header");
+var todayCardContentEl = document.querySelector(".today-card-content");
 var fivedayCardEl = document.querySelectorAll(".fiveday-card");
+var searchHistoryContainerEl = document.querySelector(".search-history-container");
+
 
 //maybe pass the city into the submitbuttonhandler from a getWeather(city) function that does the fetch :) ?
 function submitButtonHandler() {
     var citySubmit = JSON.parse(localStorage.getItem("cities")) || [];
     var cityEntryValueEl = document.querySelector(".city-entry").value.trim();
+
+    //Capitalize each letter of the city if they weren't capital in the entry
+    cityEntryValueEl = cityEntryValueEl.split(" ");
+
+    for (let i = 0; i < cityEntryValueEl.length; i++) {
+        cityEntryValueEl[i] = cityEntryValueEl[i][0].toUpperCase() + cityEntryValueEl[i].substr(1);
+    }
+
+    cityEntryValueEl = cityEntryValueEl.join(' ');
+
     //Add data validation here for the city name
 
     //If the current citySubmit array doesn't contain the city entered then push it to the array and add a search history button
@@ -28,19 +42,30 @@ function submitButtonHandler() {
         var cityHistoryEl = document.createElement("button");
         cityHistoryEl.textContent = cityEntryValueEl;
         cityHistoryEl.classList = "btn btn-primary search-history";
-        cityHistoryEl.setAttribute("data-attribute", cityEntryValueEl);
+        cityHistoryEl.setAttribute("data-city", cityEntryValueEl);
         searchHistoryContainerEl.appendChild(cityHistoryEl);
     } else {
         alert("That city is already in your recents!");
     };
 
     localStorage.setItem("cities", JSON.stringify(citySubmit));
-
-    console.log(cityEntryValueEl);
-
+    createMainHeader(cityEntryValueEl);
     getWeather(cityEntryValueEl);
 
 };
+
+// Make the history buttons display the weather
+searchHistoryContainerEl.addEventListener("click", function(event){
+    var historyAttribute = event.target.getAttribute("data-city");
+    console.log("History Attribute: ", historyAttribute)
+
+    var date = moment().format("MM/DD/YYYY");
+    var cityHeaderEl = document.createElement("h2");
+    cityHeaderEl.textContent = historyAttribute + "-" + date;
+    todayCardHeaderEl.appendChild(cityHeaderEl);
+
+    getWeather(historyAttribute);
+});
 
 function getWeather(cityEntryValueEl) {
     var post;
@@ -66,6 +91,7 @@ function getWeather(cityEntryValueEl) {
         console.log(post, userData);
         displayCurrentWeather(userData);
         displayFiveDayForecast(userData);
+        
     }).catch(function(error) {
         console.warn(error);
     })
@@ -73,36 +99,32 @@ function getWeather(cityEntryValueEl) {
 
 submitEl.addEventListener('click', submitButtonHandler);
 
-// Make the history buttons display the weather
-//Add a data attribute that is the city that the history button is and get the attribute in place of the input field text to run through the fetch
+function createMainHeader(cityEntryValueEl){
+    var cityEntryValueEl = document.querySelector(".city-entry").value.trim();
+    cityEntryValueEl = cityEntryValueEl.split(" ");
 
-var searchHistoryEl = document.querySelectorAll(".search-history");
-console.log("Search History: ", searchHistoryEl)
+    for (let i = 0; i < cityEntryValueEl.length; i++) {
+        cityEntryValueEl[i] = cityEntryValueEl[i][0].toUpperCase() + cityEntryValueEl[i].substr(1);
+    }
 
-for(i=0; i<searchHistoryEl.length; i++){
-    searchHistoryEl[i].addEventListener('click', function() {
-        var cityEntryValueEl = searchHistoryEl[i].getAttribute("data-attribute");
-        console.log("History: " , cityEntryValueEl)
-        getWeather(cityEntryValueEl);
-    });
-};
+    cityEntryValueEl = cityEntryValueEl.join(' ');
+
+    var date = moment().format("MM/DD/YYYY");
+    var cityHeaderEl = document.createElement("h2");
+    cityHeaderEl.textContent = cityEntryValueEl + "-" + date;
+    todayCardHeaderEl.appendChild(cityHeaderEl);
+    cityEntryEl.value = "";
+}
 
 function displayCurrentWeather(repos) {
 
     //Clear out current day content
-    todayCardContainerEl.innerHTML = "";
+    todayCardContentEl.innerHTML = "";
 
     if(repos.length === 0){
         todayCardContainerEl.textContent = "No repositories found";
         return;
     };
-    // var date = repos.dt;
-    var cityEntryValueEl = document.querySelector(".city-entry").value.trim();
-    var date = moment().format("MM/DD/YYYY");
-    var cityHeaderEl = document.createElement("h2");
-    cityHeaderEl.textContent = cityEntryValueEl + "-" + date;
-    todayCardContainerEl.appendChild(cityHeaderEl);
-    cityEntryEl.value = "";
 
     var icon = repos.current.weather[0].icon;
     //convert temperature from Kelvin to Farenheit
@@ -134,12 +156,12 @@ function displayCurrentWeather(repos) {
     uvIndexEl.textContent = uvIndex;
     uvIndexTextEl.textContent = "UV Index: ";
 
-    todayCardContainerEl.appendChild(iconEl);
-    todayCardContainerEl.appendChild(temperatureEl);
-    todayCardContainerEl.appendChild(windEl);
-    todayCardContainerEl.appendChild(humidityEl);
+    todayCardContentEl.appendChild(iconEl);
+    todayCardContentEl.appendChild(temperatureEl);
+    todayCardContentEl.appendChild(windEl);
+    todayCardContentEl.appendChild(humidityEl);
     uvIndexTextEl.appendChild(uvIndexEl);
-    todayCardContainerEl.appendChild(uvIndexTextEl);
+    todayCardContentEl.appendChild(uvIndexTextEl);
 };
 
 function displayFiveDayForecast(repos){
