@@ -59,6 +59,7 @@ searchHistoryContainerEl.addEventListener("click", function(event){
     var historyAttribute = event.target.getAttribute("data-city");
     console.log("History Attribute: ", historyAttribute)
 
+    todayCardHeaderEl.innerHTML = "";
     var date = moment().format("MM/DD/YYYY");
     var cityHeaderEl = document.createElement("h2");
     cityHeaderEl.textContent = historyAttribute + "-" + date;
@@ -100,6 +101,7 @@ function getWeather(cityEntryValueEl) {
 submitEl.addEventListener('click', submitButtonHandler);
 
 function createMainHeader(cityEntryValueEl){
+    todayCardHeaderEl.innerHTML = "";
     var cityEntryValueEl = document.querySelector(".city-entry").value.trim();
     cityEntryValueEl = cityEntryValueEl.split(" ");
 
