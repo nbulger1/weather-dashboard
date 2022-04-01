@@ -41,7 +41,7 @@ function submitButtonHandler() {
         citySubmit.push(cityEntryValueEl);
         var cityHistoryEl = document.createElement("button");
         cityHistoryEl.textContent = cityEntryValueEl;
-        cityHistoryEl.classList = "btn btn-primary search-history";
+        cityHistoryEl.classList = "btn search-history";
         cityHistoryEl.setAttribute("data-city", cityEntryValueEl);
         searchHistoryContainerEl.appendChild(cityHistoryEl);
     } else {
@@ -57,7 +57,6 @@ function submitButtonHandler() {
 // Make the history buttons display the weather
 searchHistoryContainerEl.addEventListener("click", function(event){
     var historyAttribute = event.target.getAttribute("data-city");
-    console.log("History Attribute: ", historyAttribute)
 
     todayCardHeaderEl.innerHTML = "";
     var date = moment().format("MM/DD/YYYY");
@@ -78,7 +77,7 @@ function getWeather(cityEntryValueEl) {
         }
     }).then(function(data) {
         post = data;
-        console.log(post);
+        // console.log(post);
         var lat = post[0].lat;
         var long = post[0].lon;
         return fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + long + "&appid=27d064bc9585ece2266de44bda36203b");
@@ -89,7 +88,7 @@ function getWeather(cityEntryValueEl) {
             return Promise.reject(response);
         }
     }).then(function (userData) {
-        console.log(post, userData);
+        // console.log(post, userData);
         displayCurrentWeather(userData);
         displayFiveDayForecast(userData);
         
@@ -158,6 +157,7 @@ function displayCurrentWeather(repos) {
     uvIndexEl.textContent = uvIndex;
     uvIndexTextEl.textContent = "UV Index: ";
 
+    //Changing the today card background image based on weather description
     if(repos.current.weather[0].main == "Clouds"){
         todayCardContainerEl.style.backgroundImage = "url('./assets/images/clouds.jpg')";
         todayCardContainerEl.style.color = "black";
@@ -230,6 +230,7 @@ window.addEventListener("load", function(){
         var cityHistoryEl = document.createElement("button");
         cityHistoryEl.textContent = citySubmitReload[i];
         cityHistoryEl.classList = "btn btn-primary search-history";
+        cityHistoryEl.setAttribute("data-city", citySubmitReload[i]);
         searchHistoryContainerEl.appendChild(cityHistoryEl);
     };
 })

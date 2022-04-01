@@ -14,10 +14,10 @@
 }
 
 .header {
-    background-color: darkblue;
     color: white;
     text-align: center;
     grid-area: header;
+    background-image: linear-gradient(to bottom right, rgb(22, 22, 79), rgb(74, 74, 247));
 }
 
 .sidebar {
@@ -26,7 +26,6 @@
 
 .today-card-container {
     grid-area: main;
-    border: black solid 1px;
     margin: 5px;
     padding: 5px;
 }
@@ -36,7 +35,8 @@
     font-size: 24px;
     font-weight: bold;
     text-align: center;
-    background-color: lightgrey;
+    /* background-color: lightgrey; */
+    background-image: linear-gradient(to bottom right, rgb(255, 255, 74), lightyellow);
 }
 
 #day-1 {
@@ -61,8 +61,20 @@
 
 #footer {
     grid-area: footer;
-    background-color: lightyellow;
     text-align: center;
+    background-image: linear-gradient(to bottom right, rgb(255, 255, 74), lightyellow);
+}
+
+#footer ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#credit {
+    font-size: 10px;
 }
 
 .search-card{
@@ -81,6 +93,7 @@
 .submit {
     margin-top: 5px;
     width: 95%;
+    background-image: linear-gradient(to bottom right, rgb(22, 22, 79), rgb(74, 74, 247));
 }
 
 .submit-line-placeholder {
@@ -98,6 +111,21 @@
     width: 95%;
 }
 
+.search-history:hover {
+    background-image: linear-gradient(to bottom right, rgb(22, 22, 79), rgb(74, 74, 247));
+    color: white;
+}
+
+.search-history:focus {
+    display: block;
+    background-color: rgb(175, 172, 172);
+    color: black;
+    border: none;
+    margin-top: 10px;
+    width: 95%;
+    padding: none;
+}
+
 #clear-history {
     margin-top: 7px;
     display: block;
@@ -106,6 +134,11 @@
     border: none;
     margin-top: 10px;
     width: 95%;
+}
+
+#clear-history:hover {
+    background-image: linear-gradient(to bottom right, rgb(22, 22, 79), rgb(74, 74, 247));
+    color: white;
 }
 
 .today-card-container-clear {
@@ -120,10 +153,10 @@
 }
 
 .fiveday-card {
-    background-color: rgb(66, 66, 85);
     color: white;
     margin: 5px;
-    border: solid rgb(66, 66, 85) 5px;
+    padding: 5px;
+    background-image: linear-gradient(to bottom right, rgb(22, 22, 79), rgb(74, 74, 247))
 }
 
 .uv-good {
@@ -159,4 +192,10 @@
         "day-5"
         "footer";
     }
+
+    .city-entry, .submit, #clear-history, .search-history, .submit-line-placeholder {
+        width: 100%;
+        align-items: center;
+    }
+
 }
