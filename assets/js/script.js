@@ -9,7 +9,7 @@ var fivedayCardEl = document.querySelectorAll(".fiveday-card");
 var searchHistoryContainerEl = document.querySelector(".search-history-container");
 
 
-//function to handle the submit button ?
+//function to handle the submit button
 function submitButtonHandler() {
     //pull any cities in local storage and store them in an array
     var citySubmit = JSON.parse(localStorage.getItem("cities")) || [];
@@ -185,7 +185,7 @@ function displayCurrentWeather(repos) {
     } else if(repos.current.weather[0].main == "Snow"){
         todayCardContainerEl.style.backgroundImage = "url('./assets/images/snow.jpg')";
         todayCardContainerEl.style.color = "black";
-    } else if(repos.current.weather[0].main == "Rain"){
+    } else if(repos.current.weather[0].main == "Rain" | repos.current.weather[0].main == "Drizzle"){
         todayCardContainerEl.style.backgroundImage = "url('./assets/images/rain.jpg')";
         todayCardContainerEl.style.color = "white";
     } else {
