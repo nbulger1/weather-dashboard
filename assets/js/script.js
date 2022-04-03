@@ -78,7 +78,7 @@ function getWeather(cityEntryValueEl) {
         }
     }).then(function(data) {
         post = data;
-        console.log(post);
+        // console.log(post);
         //Create variable for the lat and long that can be passed through the next API call
         var lat = post[0].lat;
         var long = post[0].lon;
@@ -91,7 +91,7 @@ function getWeather(cityEntryValueEl) {
             return Promise.reject(response);
         }
     }).then(function (userData) {
-        console.log(post, userData);
+        // console.log(post, userData);
         //If all the data is good then run the display functions for the current weather and the 5 day forecast
         displayCurrentWeather(userData);
         displayFiveDayForecast(userData);
