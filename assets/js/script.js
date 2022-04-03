@@ -69,7 +69,7 @@ searchHistoryContainerEl.addEventListener("click", function(event){
 function getWeather(cityEntryValueEl) {
     var post;
     //first gather the latitude and longitude of the city name entered using the geocoding API
-    fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + cityEntryValueEl + "&limit=5&appid=27d064bc9585ece2266de44bda36203b").then(function (response) {
+    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + cityEntryValueEl + "&limit=5&appid=27d064bc9585ece2266de44bda36203b").then(function (response) {
         if(response.ok) {
             return response.json();
         } else {

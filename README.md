@@ -79,4 +79,6 @@ THEN I am again presented with current and future conditions for that city
 
 ## Link
 
-See the following for a link to my deployed application: https://nbulger1.github.io/weather-dashboard/
+See the following for a link to my deployed application: http://nbulger1.github.io/weather-dashboard/
+
+I ran into an issue, once published, that the geocoding API URL uses "http" instead of "https" which through a mixed content error in the deployed page unless I changed the URL from "https://nbulger1..." to "http://nbulger1...". Once the URL was changed then it returned to the function I was expecting. 
