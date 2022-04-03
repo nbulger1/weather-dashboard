@@ -79,4 +79,4 @@ THEN I am again presented with current and future conditions for that city
 
 ## Link
 
-See the following for a link to my deployed application: 
+See the following for a link to my deployed application: https://nbulger1.github.io/weather-dashboard/
