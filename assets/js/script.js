@@ -144,7 +144,8 @@ function displayCurrentWeather(repos) {
     var icon = repos.current.weather[0].icon;
     //convert temperature from Kelvin to Farenheit
     var temperature = "Temp: " + (((repos.current.temp-273.15)*1.8)+32).toFixed(1) + " \xB0F";
-    var wind = "Wind: " + repos.current.wind_speed + " MPH";
+    //multiply the speed by 2.23694 because the default unit is m/s
+    var wind = "Wind: " + (repos.current.wind_speed*2.23694).toFixed(1) + " MPH";
     var humidity = "Humidity: " + repos.current.humidity + "%";
     var uvIndex = repos.current.uvi;
 
@@ -226,7 +227,8 @@ function displayFiveDayForecast(repos){
         var icon = repos.daily[i].weather[0].icon;
         //convert temperature from Kelvin to Farenheit
         var temperature = "Temp: " + (((repos.daily[i].temp.day-273.15)*1.8)+32).toFixed(1) + " \xB0F";
-        var wind = "Wind: " + repos.daily[i].wind_speed + " MPH";
+        //multiply the speed by 2.23694 because the default unit is m/s
+        var wind = "Wind: " + (repos.daily[i].wind_speed*2.23694).toFixed(1) + " MPH";
         var humidity = "Humidity: " + repos.daily[i].humidity + "%";
 
         //Create the child elements
