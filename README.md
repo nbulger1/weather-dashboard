@@ -7,10 +7,13 @@
 - [Javascript](#)
 - [Tests](#tests)
 - [Link](#link)
+- [License](#license)
 
 ## Application
 
 The user story highlighted a traveler that wants to see the weather forecast for multiple to assist travel planning. The acceptance criteria included a page load that presents a weather dashboard with form inputs. The search input for a city should present the current and future conditions within that city as well as add the city to the search history. When viewing the current weather conditions the user should be presented with the city name, the date, an icon weather representation, the temperature, humidity, wind speed and UV index. The UV index should be color coded based on a favorable, moderate, or severe value. The future weather should be presented as a 5-day forecase that displays the date, an icon representation of the weather, the temperature, wind speed, and humidity. Finally, when the city is clicked on in the search history then the browser should present the weather again. 
+
+Technologies used: HTML, CSS, Javascript, Local Storage, Server-Side APIs (openweathermap.com)
 
 ## HTML
 
@@ -82,3 +85,6 @@ THEN I am again presented with current and future conditions for that city
 See the following for a link to my deployed application: http://nbulger1.github.io/weather-dashboard/
 
 I ran into an issue, once published, that the geocoding API URL uses "http" instead of "https" which through a mixed content error in the deployed page unless I changed the URL from "https://nbulger1..." to "http://nbulger1...". Once the URL was changed then it returned to the function I was expecting. This error seems to be gone now with either URL, but leaving this note here just in case it happens again. 
+
+## License 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
